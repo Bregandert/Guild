@@ -44,11 +44,11 @@
         public void setStrength(int strength) {
             this.strength = strength;
         }
-        public int getDexterity() {
+        public int getAgility() {
             return agility;
         }
-        public void setDexterity(int dexterity) {
-            this.agility = dexterity;
+        public void setAgility(int agility) {
+            this.agility = agility;
         }
         public int getExperiencePoints() {
             return experiencePoints;

@@ -1,3 +1,6 @@
 public interface Seller {
-    String sell(Vendor.Goods goods);
+
+
+    //Метод для продажи
+    String sell(Vendor.Goods goods, Hero hero);
 }

@@ -7,7 +7,8 @@ public class Realm {
     //Класс для чтения введенных строк из консоли
     private static BufferedReader br;
     //Игрок должен храниться на протяжении всей игры
-    private static Character player = null;
+    private static Hero player = null;
+    private static Vendor vendor = new Vendor();
     //Класс для битвы можно не создавать каждый раз, а переиспользовать
     private static BattleScene battleScene = null;
     public static void main(String[] args) {
@@ -43,8 +44,10 @@ public class Realm {
         //Варианты для команд
         switch (string) {
             case "1": {
-                System.out.println("Торговец еще не приехал");
+                useHPpotion();
+                printNavigation();
                 command(br.readLine());
+
             }
             break;
             case "2": {
@@ -77,14 +80,17 @@ public class Realm {
         battleScene.fight(player, createMonster(), new FightCallback() {
             @Override
             public void fightWin() {
-                System.out.println(String.format("%s победил! Теперь у вас %d опыта и %d золота, а также осталось %d едениц здоровья.", player.getName(), player.getExperiencePoints(), player.getGold(), player.getHealthPoints()));
+                System.out.println(String.format("%s победил! Теперь у вас %d опыта и %d золота, а также осталось %d единиц здоровья.", player.getName(), player.getExperiencePoints(), player.getGold(), player.getHealthPoints()));
+                player.levelUp();
                 System.out.println("Желаете продолжить поход или вернуться в город? (да/нет)");
+
                 try {
                     command(br.readLine());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
 
             @Override
             public void fightLost() {
@@ -113,6 +119,18 @@ public class Realm {
                 100,
                 10
         );
+    }
+
+    private static void useHPpotion() {
+        if (vendor.sell(Vendor.Goods.HPPOTION, (Hero) player)== "HP potion") {
+        player.setHealthPoints(player.getHealthPoints()+ vendor.healPoints());
+        System.out.println(String.format("%s успешно купил зелье! Теперь у вас %d золота", player.getName(), player.getGold()));
+        System.out.println(String.format("%s выпил зелье! Теперь у вас %d единиц здоровья", player.getName(), player.getHealthPoints()));
+        System.out.println();}
+        else {
+            System.out.println("У вас не хватает денег для покупки зелья здоровья");
+            System.out.println();
+        }
     }
 
     public interface FightCallback {
